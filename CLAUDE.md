@@ -13,7 +13,7 @@ Sachin's personal portfolio website. A scroll-driven "space journey" narrative �
 
 **Stack:** Next.js 16.2.4 (App Router, Turbopack) · React 19.2.4 · TypeScript 5 · Tailwind v4 · `@react-three/fiber` + `@react-three/drei` + `three` · `@splinetool/react-spline` · GSAP 3.15 (ScrollTrigger) · Lenis 1.3 (smooth scroll) · framer-motion 12 (currently unused — was Sky cloud parallax, removed when Sky got a video bg) · `@vercel/analytics`. ESLint 9.
 
-No Vercel CLI, no `vercel.ts`/`vercel.json`, no test framework. The repo is dirty (untracked changes on `master`); initial commit is the only one.
+No Vercel CLI, no `vercel.ts`/`vercel.json`, no test framework. **As of 2026-06-08 the repo is on GitHub at `Sachin2077/portfolio_2026`, production branch `main`, hosted on Vercel via the GitHub integration (every push to `main` auto-deploys).** See the 2026-06-08 session below and the `deployment-setup` auto-memory.
 
 ---
 
@@ -85,13 +85,39 @@ lib/
   useLenis.ts                    — Lenis init + Lenis↔GSAP↔ScrollTrigger wiring
   projects.ts                    — PROJECTS array (6 moons)
 public/
-  planet.png, open-planet.png    — planet assets (open-planet currently unused — see notes)
-  stars.mp4                      — hero starfield
-  planet.svg                     — alternate
-Assets/                          — design references, NOT shipped
-_design_bundle/                  — design references, NOT shipped
-design-reference/                — design references, NOT shipped
+  planet.png                     — planet asset (Hero + Moons). Only sizeable shipped asset (~267KB).
+  file/globe/next/vercel/window.svg — create-next-app defaults, tiny, unused
+  (stars.mp4 → now served from ImageKit; open-planet.png + planet.svg → deleted. See 2026-06-08 session.)
+Assets/, _design_bundle/, design-reference/  — design refs, NOT shipped. Now gitignored (kept locally, excluded from repo).
 ```
+
+---
+
+## Session 2026-06-08 (additive — earlier sessions below)
+
+Shipped the site to version control + hosting, and cut the repo's heaviest assets over to ImageKit.
+
+### A. GitHub + Vercel deployment
+- Pushed to a previously-empty GitHub repo: **`https://github.com/Sachin2077/portfolio_2026.git`**. Renamed the local branch `master → main` so it matches GitHub's default and becomes Vercel's production branch.
+- Hosting = **Vercel via GitHub import** (dashboard OAuth — user does that step). No `vercel.ts`/`vercel.json` needed; Next.js auto-detected. Every push to `main` auto-deploys; PRs get preview URLs.
+- **Build is the gate**: `npm run build` (full TS + ESLint, no ignore flags — stricter than the Turbopack dev server) must pass before pushing. It passed clean both times this session.
+- **Env vars live in the Vercel dashboard, NOT git** (`.env*` is gitignored). All optional (code has fallbacks): `RESEND_API_KEY`, `CONTACT_TO`, `CONTACT_FROM`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_SPLINE_AVATAR_URL`. Canonical names in `.env.local.example`. Vercel does **not** read local `.env` files — they must be set in project settings for prod.
+
+### B. Repo cleanup (commit `63b9c70`)
+- Gitignored `Assets/`, `_design_bundle/`, `design-reference/` (design refs, not shipped) and `git rm --cached`'d them — kept on local disk, excluded from the repo (drops the 41 MB unused `Assets/0_Particle_Star_3840x2160.mp4` + ~49 MB total).
+- Deleted genuinely-unused `public/open-planet.png` (6.1 MB) + `public/planet.svg` (1.9 MB) — grep-verified no references.
+- Hardened `.gitignore`: added `..env` + `*..env` to catch a stray **empty** `app/..env` file (double-dot name, wrong folder — `.env*` didn't match it). Next.js only reads env files as `.env.local` from the **project root**, so `app/..env` did nothing; it's now un-committable. For local dev, use `.env.local` at root.
+
+### C. Hero starfield → ImageKit (commit `7796b5b`)
+- `components/ui/Hero.tsx` `<source>` swapped from `/stars.mp4` to **`https://ik.imagekit.io/Sachinvm/stars.mp4`** (user uploaded it there). Removed the 41 MB local `public/stars.mp4` from repo + disk.
+- The `<video>` has a single ImageKit `<source>` (no local fallback). If the URL 404s/is blocked, the Hero degrades to the CSS starfield (`.hero-video-fallback`) — intended graceful fallback. **Verify it actually plays on the deployed site** to confirm ImageKit delivery.
+- Repo is now lean: `public/planet.png` (~267 KB) is the only sizeable shipped asset.
+
+### Files modified this session
+- `components/ui/Hero.tsx` — starfield `<source>` → ImageKit URL
+- `.gitignore` — design-ref dirs + double-dot env patterns
+- (removed) `public/stars.mp4`, `public/open-planet.png`, `public/planet.svg`
+- `CLAUDE.md` — this entry + reconciled stale public/ + repo-state lines
 
 ---
 
@@ -202,7 +228,7 @@ Markers were temporarily added for visual verification, then removed once the us
 
 ## Current state per section
 
-- **Hero:** Untouched this session. Working.
+- **Hero:** Starfield video now streams from **ImageKit** (`https://ik.imagekit.io/Sachinvm/stars.mp4`) — see 2026-06-08 session. Single `<source>`, no local fallback (degrades to `.hero-video-fallback` CSS starfield if the URL fails). Working.
 - **Core:** Stripped + scroll-controlled video bg. Text reveals retimed. Runway 300vh. **Pending:** the user is independently building the scroll animation video (the 240 frames at ImageKit `Sachinvm/portfolio-scroll-anim/f_001.jpg → f_240.jpg`). Their pipeline produces those frames; we load them as the bg.
 - **Land:** Redesigned this session — restrained-editorial typography + single composed two-column screen (intro left; Practice + Currently Exploring stacked right), all content visible at once with one gentle staggered entrance that holds. Working.
 - **Sky:** Scroll-driven canvas video bg (145 frames at ImageKit `Sachinvm/portfolio-scroll-anim-sky/f_001.jpg → f_145.jpg`, pre-reversed at the asset level so forward scroll plays "clear sky → clouds roll in → fog thickens"). Mirrors Core's integration: `.frame-sky` runway 300vh, `.sky-stage` sticky pin, `.sky-video-bg` first child, `.sky-grid` text container. Text reveals retimed to element-percentage so all complete by ~48% of runway. Previous parallax cloud field (`<SkyBackground />` + `.sky-bg` glows + `.sky-clouds`) ripped out cleanly.
@@ -249,9 +275,9 @@ These are the easiest single-value adjustments without restructuring:
 
 - **Sky → Work (Moons) seam** — unresolved. Multiple attempts this session (a `.frame-moons::before` bleed, a `.frame-sky::after` fade-to-black, a freestanding `.sky-to-work-transition` bridge strip) were all reverted at user request. Currently `<SkyLayer />` is immediately followed by `<Moons />` in `app/page.tsx` with no transition element. Don't reattempt without an explicit ask + a concrete brief on what "good" looks like. See `~/.claude/plans/woolly-nibbling-sloth.md` for the rejected attempts.
 - **Delete `components/SkyBackground.tsx`** — orphaned this session, only referenced by CLAUDE.md. Holding until user OKs.
-- **Hero polish** — the stars-video bg + planet are working but haven't been audited this session.
+- **Hero polish** — the planet + (now ImageKit) starfield work but haven't been visually audited; confirm the ImageKit video plays on the deployed site.
 - **Project `href` values** — `lib/projects.ts` has no `href` set on any project (other than Anatolia which has `link: "Live"` but no URL). The Moons panel "Live / Case study" link currently goes to `#`. Need real URLs.
-- **`/open-planet.png`** is no longer used (removed from Core). Could be deleted from `public/`.
+- **Resend / contact form** — set `RESEND_API_KEY` (+ a verified-domain `CONTACT_FROM`, or `onboarding@resend.dev` for testing) in the Vercel dashboard so the contact form actually sends. Without it `/api/contact` returns `delivered:false`.
 - **`framer-motion` is now unused** since SkyBackground was orphaned. Safe to `npm uninstall framer-motion` if `SkyBackground.tsx` is also deleted.
 
 ---

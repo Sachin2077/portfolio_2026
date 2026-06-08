@@ -55,7 +55,7 @@ export default function Hero() {
             preload="metadata"
             aria-hidden="true"
           >
-            <source src="/stars.mp4" type="video/mp4" />
+            <source src="https://ik.imagekit.io/Sachinvm/stars.mp4" type="video/mp4" />
           </video>
         )}
         {/* CSS starfield fallback — visible on mobile + during video load + reduced motion */}

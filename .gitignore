@@ -46,3 +46,13 @@ next-env.d.ts
 /Assets/
 /_design_bundle/
 /design-reference/
+
+# OpenNext
+.open-next
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+
+!.env.example

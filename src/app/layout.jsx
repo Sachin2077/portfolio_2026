@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/next';
 import { Inter, Pixelify_Sans, Ponomar, Poly, Poppins } from 'next/font/google';
 import Footer from '@/components/layout/Footer';
 import Header from '@/components/layout/Header';
@@ -74,6 +75,8 @@ export default function RootLayout({ children }) {
         <Header />
         <main id="main">{children}</main>
         <Footer />
+        {/* Vercel Web Analytics: page views, sent only from the deployed site. */}
+        <Analytics />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(person).replace(/</g, '\\u003c') }}

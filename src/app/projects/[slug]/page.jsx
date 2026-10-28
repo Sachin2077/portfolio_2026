@@ -141,7 +141,7 @@ export default async function ProjectPage({ params }) {
       />
 
       <div className="mt-20 flex flex-col gap-16 md:mt-24">
-        <CaseSection label="The problem" title={project.problem.lead}>
+        <CaseSection label="The challenge" title={project.problem.lead}>
           <ul className="grid gap-[23px] md:grid-cols-3">
             {project.problem.points.map((point, i) => (
               <li key={point} className="flex gap-4 rounded-[10px] bg-tile px-5 py-5 shadow-tile">
@@ -152,7 +152,7 @@ export default async function ProjectPage({ params }) {
           </ul>
         </CaseSection>
 
-        <CaseSection label="What I did" title="The steps I took">
+        <CaseSection label="Process" title="How I approached it">
           <ol className="grid gap-[23px] sm:grid-cols-2 xl:grid-cols-4">
             {project.steps.map((step, i) => (
               <li key={step.title} className="flex">
@@ -162,7 +162,7 @@ export default async function ProjectPage({ params }) {
           </ol>
         </CaseSection>
 
-        <CaseSection label="Decisions that mattered" title="Three choices that shaped it">
+        <CaseSection label="Key decisions" title="Three decisions that shaped the outcome">
           <ul className="grid gap-[23px] lg:grid-cols-3">
             {project.decisions.map((decision, i) => (
               <li key={decision.title} className="rounded-2xl bg-surface p-2 shadow-frame">
@@ -189,7 +189,7 @@ export default async function ProjectPage({ params }) {
         </CaseSection>
 
         {gallery.length ? (
-          <CaseSection label="Screens" title="A closer look">
+          <CaseSection label="Screens" title="Selected screens">
             <div className="grid gap-x-[23px] gap-y-12 md:grid-cols-2">
               {gallery.map((screen, i) => {
                 // An odd screen out spans both columns, so it asks for an image as wide as the cover's.
@@ -209,7 +209,7 @@ export default async function ProjectPage({ params }) {
           </CaseSection>
         ) : null}
 
-        <CaseSection label="The result" title={project.status}>
+        <CaseSection label="Outcome" title={project.status}>
           <ul className="grid gap-[23px] md:grid-cols-2">
             {project.results.map((result) => (
               <li key={result} className="flex items-start gap-4 rounded-[10px] bg-tile px-5 py-5 shadow-tile">
@@ -227,7 +227,7 @@ export default async function ProjectPage({ params }) {
 
         <section className="rounded-[10px] px-6 py-14 text-center shadow-band md:px-16">
           <h2 className="font-poppins text-[13.8px] font-medium tracking-[0.15px] text-journey">
-            What it taught me
+            Key learning
             {chapter ? <span className="text-ink/45"> · Chapter {chapter.number}</span> : null}
           </h2>
           <p className="mx-auto mt-5 max-w-[900px] font-serif text-[clamp(28px,2.3vw,44px)] leading-[1.2] text-fade-title">
@@ -246,7 +246,7 @@ export default async function ProjectPage({ params }) {
         {next ? (
           <Link href={`/projects/${next.slug}`} className="group">
             <span className="font-poppins text-[13.8px] font-medium tracking-[0.15px] text-journey">
-              Next in my journey
+              Next project
             </span>
             <span className="mt-1 flex items-center gap-3 font-serif text-[clamp(30px,2.1vw,40px)] leading-tight text-ink/80 transition-colors group-hover:text-primary">
               {next.name}

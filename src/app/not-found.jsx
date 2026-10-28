@@ -21,14 +21,14 @@ export default function NotFound() {
       <p className="mt-8 font-poppins text-[13.8px] font-medium tracking-[0.15px] text-journey">
         404 · Page not found
       </p>
-      <h1 className="mt-3 font-serif text-display text-ink/80">This page was never drawn.</h1>
+      <h1 className="mt-3 font-serif text-display text-ink/80">This page does not exist.</h1>
       <p className="mt-4 max-w-[480px] text-lg font-medium leading-[30px] text-ink/70">
-        The link may be old, or a letter slipped. Everything else is where I left it.
+        The link may be outdated or mistyped. You can return to the home page or browse my projects.
       </p>
       <div className="mt-8 flex flex-wrap justify-center gap-3">
-        <Button href="/">Go home</Button>
+        <Button href="/">Back to home</Button>
         <Button href={sectionHref('projects')} variant="soft" size="md" className="px-6">
-          See my projects
+          View projects
         </Button>
       </div>
     </section>

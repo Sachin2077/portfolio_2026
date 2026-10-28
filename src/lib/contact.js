@@ -18,9 +18,9 @@ export async function sendNote(_previous, formData) {
   if (formData.get('company')) return { status: 'sent', name: values.name };
 
   const errors = {};
-  if (!values.name) errors.name = 'Add your name.';
-  if (!EMAIL.test(values.email)) errors.email = 'Add an email address I can reply to.';
-  if (values.message.length < 10) errors.message = 'Tell me a little more, a sentence or two.';
+  if (!values.name) errors.name = 'Please enter your name.';
+  if (!EMAIL.test(values.email)) errors.email = 'Please enter a valid email address.';
+  if (values.message.length < 10) errors.message = 'Please add a few more details about the project or role.';
   if (Object.keys(errors).length) return { status: 'invalid', errors, values };
 
   const key = process.env.RESEND_API_KEY;

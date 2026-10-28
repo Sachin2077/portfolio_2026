@@ -4,7 +4,7 @@ export const site = {
   name: 'Sachin Verma',
   title: 'Sachin Verma · UI/UX Designer · Gurugram',
   description:
-    'Sachin Verma is a UI/UX designer in Gurugram and co-founder of Zarah AI. He plans, designs and builds AI products and websites, starting with the people who will use them.',
+    'Sachin Verma is a UI/UX designer in Gurugram, India, and co-founder and Head of Design at Zarah AI LLP. He plans and designs digital products and websites, from research to launch.',
   url: 'https://sachinverma.site',
   location: 'Gurugram',
   country: 'India',
